@@ -8,6 +8,7 @@ function cors(req, res) {
   if (req.method === 'OPTIONS') { res.status(200).end(); return true; }
   return false;
 }
+
 async function readBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
   const chunks = [];

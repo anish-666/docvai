@@ -21,6 +21,14 @@ async function readBody(req) {
   }
   return raw; // form-data / text fallback
 }
+// inside your handler(req, res) after you construct url/path:
+const url = new URL(req.url, `http://${req.headers.host}`);
+req.query = Object.fromEntries(url.searchParams.entries());
+
+// parse body for POST/PATCH/PUT
+if (['POST','PUT','PATCH'].includes(req.method)) {
+  req.body = await readBody(req);
+}
 
 import { parseDemoUsers, makeToken } from '../../lib/auth.js';
 

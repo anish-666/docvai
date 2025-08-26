@@ -1,3 +1,27 @@
+// --- add these helpers near the top of api/index.js ---
+function cors(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  if (req.method === 'OPTIONS') { res.status(200).end(); return true; }
+  return false;
+}
+
+async function readBody(req) {
+  // already parsed?
+  if (req.body && typeof req.body === 'object') return req.body;
+
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  const raw = Buffer.concat(chunks).toString('utf8');
+  const ct = req.headers['content-type'] || '';
+
+  if (ct.includes('application/json')) {
+    try { return raw ? JSON.parse(raw) : {}; } catch { return {}; }
+  }
+  return raw; // form-data / text fallback
+}
+
 import { parseDemoUsers, makeToken } from '../../lib/auth.js';
 
 export default async function handler(req, res){

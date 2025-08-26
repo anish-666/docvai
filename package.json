@@ -1,0 +1,11 @@
+{
+  "name": "vercel-bolna-api-full",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5",
+    "uuid": "^9.0.1"
+  }
+}

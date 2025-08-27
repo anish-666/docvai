@@ -1,6 +1,6 @@
-export const config = { runtime: 'nodejs18.x' };
-
 // api/auth/login.js
+export const config = { runtime: 'nodejs' };
+
 import { parseDemoUsers, makeToken } from '../../lib/auth.js';
 
 function setCors(res) {
@@ -14,10 +14,7 @@ function setCors(res) {
 }
 
 async function readJsonBody(req) {
-  // If Vercel already parsed it:
   if (req.body && typeof req.body === 'object') return req.body;
-
-  // Node runtime stream read:
   try {
     const chunks = [];
     for await (const c of req) chunks.push(c);
@@ -28,10 +25,7 @@ async function readJsonBody(req) {
 
 export default async function handler(req, res) {
   setCors(res);
-
-  // Preflight must be 200 + CORS headers
   if (req.method === 'OPTIONS') return res.status(200).end();
-
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email, password } = await readJsonBody(req);

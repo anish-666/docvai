@@ -1,4 +1,6 @@
 // api/auth/login.js
+export const config = { runtime: 'nodejs18.x' };
+
 import { parseDemoUsers, makeToken } from '../../lib/auth.js';
 
 function setCors(res) {

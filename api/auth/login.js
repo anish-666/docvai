@@ -22,18 +22,22 @@ async function readJsonBody(req) {
     return raw ? JSON.parse(raw) : {};
   } catch { return {}; }
 }
-// inside export default async function handler(req, res) { ... }
-if (process.env.AUTH_BYPASS === '1') {
-  // make sure you have readJsonBody in this file already
-  const body = await readJsonBody(req);
-  const email = (body?.email || 'demo').toLowerCase();
-  const token = makeToken('t_demo', email);
-  return res.json({ token, tenantId: 't_demo', email });
-}
 
 export default async function handler(req, res) {
   setCors(res);
+
+  // Preflight
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // ---------- TEMP BYPASS ----------
+  if (process.env.AUTH_BYPASS === '1') {
+    const body = await readJsonBody(req);
+    const email = (body?.email || 'demo').toLowerCase();
+    const token = makeToken('t_demo', email);
+    return res.json({ token, tenantId: 't_demo', email });
+  }
+  // ---------------------------------
+
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email, password } = await readJsonBody(req);

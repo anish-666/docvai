@@ -12,6 +12,14 @@ function setCors(res) {
   );
   res.setHeader('Access-Control-Max-Age', '86400');
 }
+{
+  "functions": {
+    "api/**/*": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
+
 
 async function readJsonBody(req) {
   // If Vercel has already parsed it, use it
